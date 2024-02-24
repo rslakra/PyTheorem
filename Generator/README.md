@@ -11,6 +11,8 @@ python -V #Python 3.9
 pip install openpyxl
 ```
 
+
+```
 Generator/
 |-- code/
 |   |-- __init__.py
@@ -28,3 +30,7 @@ Generator/
 |
 |-- setup.py
 |-- README
+```
+
+# Author
+- Rohtash Lakra

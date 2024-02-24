@@ -1,6 +1,8 @@
 # Python
 This repository contains the python project.
 
+
+```
 Sample/
 |-- code/
 |   |-- __init__.py
@@ -18,3 +20,7 @@ Sample/
 |
 |-- setup.py
 |-- README
+```
+
+# Author
+- Rohtash Lakra
