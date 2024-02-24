@@ -3,7 +3,7 @@
 """
 A Python load test for job_queue table.
 
-Author - Rohtash Lakra <work.lakra@gmail.com>
+Author - Rohtash Lakra
 """
 
 from datetime import datetime
@@ -23,13 +23,13 @@ WAIT_IN_MINUTES = "waitInMinutes"
 BATCH__SIZE = "batchSize"
 
 config = {
-    DB_ENV_TYPE: "CI",
+    DB_ENV_TYPE: "dev",
     DB_HOST: "localhost",
     DB_PORT: "61621",
-    DB_NAME: "apps_necb01c",
-    DB_USER_NAME: "mb",
-    DB_PASSWORD: "mb",
-    DB_TABLE: "JOB_QUEUE_RLAKRA",
+    DB_NAME: "apps_data_sync",
+    DB_USER_NAME: "userName",
+    DB_PASSWORD: "password",
+    DB_TABLE: "DATA_SYNC_QUEUE",
     DB_TABLE_SEQ_GENERATOR: "sync_jobs_ID_SEQ.nextval",
     POOL_SIZE: "25",
     WAIT_IN_MINUTES: "15",
@@ -37,14 +37,14 @@ config = {
 }
 # print(config)
 
-jsonParameters = '{"rxOn":false, "dr":false, "rmx":false, "cpp":false, "mq":true, "editorialReview":false}'
+jsonParameters = '{"id":1, "jobType":'jobType', "entityId":'entityId', "createdOn":'createdOn', "syncStatus":'PENDING'}'
 # print(jsonParameters)
 
 dateStr = "to_date(':2', 'DD-MM-YYYY HH24:MI:SS')"
 # print(dateStr)
 
 sql = (
-    f"INSERT INTO mb.{config[DB_TABLE]} (ID, JOB_TYPE, ENTITY_ID, CREATED_ON, STATUS, ADVERTISER_ID, PARAMETERS, MQ_STATUS) VALUES (mb.{config[DB_TABLE_SEQ_GENERATOR]}, 'PYTHON_LOAD_TEST', :1, {dateStr}, 'SYNC_PENDING', 0, '{jsonParameters}', 'SYNC_PENDING')")
+    f"INSERT INTO mb.{config[DB_TABLE]} (ID, JOB_TYPE, ENTITY_ID, CREATED_ON, SYNC_STATUS) VALUES (mb.{config[DB_TABLE_SEQ_GENERATOR]}, 'DATA_SYNC_TEST', :1, {dateStr}, 'SYNC_PENDING', 0, '{jsonParameters}', 'SYNC_PENDING')")
 print(sql)
 
 

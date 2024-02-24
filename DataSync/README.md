@@ -1,7 +1,7 @@
 # Python
 This repository contains the python project.
 
-Sample/
+DataSync/
 |-- code/
 |   |-- __init__.py
 |   |-- main.py
