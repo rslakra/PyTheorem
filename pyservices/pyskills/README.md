@@ -3,7 +3,7 @@ This repository contains the python project.
 
 
 ```
-DataSync/
+LearnPython/
 |-- code/
 |   |-- __init__.py
 |   |-- main.py
