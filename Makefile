@@ -1,5 +1,11 @@
+#
+# Author: Rohtash Lakra
+#
+# Makefile macros (or variables) are defined a little bit differently than traditional bash, keep in mind that in
+# the 'Makefile' there's top-level Makefile-only syntax, and everything else is bash script syntax.
+# The ${} notation is specific to the make syntax and is very similar to bash's $()
+#
 # Signifies our desired python version
-# Makefile macros (or variables) are defined a little bit differently than traditional bash, keep in mind that in the Makefile there's top-level Makefile-only syntax, and everything else is bash script syntax.
 # PYTHON = python3
 # https://gist.github.com/MarkWarneke/2e26d7caef237042e9374ebf564517ad
 #
@@ -69,6 +75,9 @@ setup:
 	python3 -m $(VENV) $(VENV)
 	#source $(VENV)/bin/activate
 	. $(VENV)/bin/activate
+	@echo
+	(pwd)
+	@echo
 	$(PIP) install --upgrade pip
 	$(PYTHON) -m pip install -r requirements.txt
 
@@ -78,7 +87,8 @@ clean:
 	@echo "Cleaning up ..."
 	#$(VENV)/bin/deactivate
 	#deactivate
-	rm -rf $(VENU)
+	@echo "Removing $(VENV)"
+	rm -rf $(VENV)
 	rm -rf $(REMOVE_FILES) *.project
 	find . -name '*.py[co]' -delete
 	find . -type f -name '*.py[co]' -delete
@@ -86,27 +96,31 @@ clean:
 venv: ## Activates the virtual environment
 venv:
 	@echo "Activating Virtual Environment ..."
-	source $(VENU)/bin/activate
+	source $(VENV)/bin/activate
 
-run: ## Runs the python application
-run: venv
+flask-app: ## Runs the python application
+flask-app: venv
 	@echo "Running Python Application ..."
 	@$(PYTHON) -m flask --app wsgi run --port 8080 --debug
 
-# The ${} notation is specific to the make syntax and is very similar to bash's $()
-# This function uses pytest to test our source files
-test: ## Tests the python application
-test:
-	@echo "Testing Python Application ..."
+# This function uses unittest to test our source files
+unittest: ## Tests the python application
+unittest:
+	@echo "Running Python [unittest] ..."
 	@$(PYTHON) -m unittest
-	@#$(PYTHON) -m pytest
 	-#find coverage/ -mindepth 1 -delete
 #	pytest $${TESTS}
 #	@$(PYTHON) setup.py sdist
 
+# This function uses pytest to test our source files
+pytest: ## Tests the python application
+pytest:
+	@echo "Running Python [pytest] ..."
+	@$(PYTHON) -m pytest
+	-#find coverage/ -mindepth 1 -delete
 
-doc: ## Generates the documentation
-doc:
+docs: ## Generates the documentation
+docs:
 	${PYTHON} setup.py build_sphinx
 	@echo
 	@echo Generated documentation: "file://"$$(readlink -f doc/build/html/index.html)

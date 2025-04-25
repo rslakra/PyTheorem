@@ -182,6 +182,7 @@ i.e.:
 - [Web-Scraping-Projects](https://github.com/israel-dryer/Web-Scraping-Projects?tab=readme-ov-file)
 
 - [Python Projects – Beginner to Advanced](https://www.geeksforgeeks.org/python-projects-beginner-to-advanced/)
+- [The HitchHiker's Guide to Python](https://docs.python-guide.org/writing/structure/)
 
 
 # Author

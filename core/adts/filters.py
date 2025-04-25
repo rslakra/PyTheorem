@@ -9,7 +9,7 @@ import mmh3
 from bitarray import bitarray
 
 from core.data_types import getClassName
-from core.logs import timer_decorator
+from core.logger.logs import timer_decorator
 
 logger = logging.getLogger(__name__)
 
