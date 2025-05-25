@@ -7,7 +7,7 @@ from itertools import count
 from typing import Any
 
 from core.adts.base import BaseIterable
-from core.enums import Priority
+from core.enums.priority import Priority
 
 
 class Queue(BaseIterable):

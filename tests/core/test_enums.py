@@ -5,12 +5,16 @@ import logging
 import unittest
 from datetime import date
 
-from core.enums import BaseEnum, ColorEnum, WeekDaysEnum
-from core.enums import EvenOddEnum, LogTypeEnum, HttpMethodEnum
-from core.enums import NumberEnum, ShapeEnum, UniqueShapeEnum
-from core.enums import OrdinalEnum, LowerCaseOrdinalEnum
-from core.enums import Priority
-from core.enums import StatusEnum, AutoNameEnum, AutoNameLowerCaseEnum
+from core.enums import BaseEnum, AutoNameEnum, AutoNameLowerCaseEnum
+from core.enums.colors import ColorEnum
+from core.enums.days import WeekDaysEnum
+from core.enums.http import HttpMethodEnum
+from core.enums.logs import LogTypeEnum
+from core.enums.nums import EvenOddEnum, NumberEnum
+from core.enums.ordinal import OrdinalEnum, LowerCaseOrdinalEnum
+from core.enums.priority import Priority
+from core.enums.shape import ShapeEnum, UniqueShapeEnum
+from core.enums.status import StatusEnum
 
 logger = logging.getLogger(__name__)
 
