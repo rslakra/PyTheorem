@@ -44,7 +44,3 @@ if __name__ == '__main__':
 # Or you can use a relative import, where '..' refers to the package one level up.
 # .. evaluates to the parent package (pkg), and
 # ..sub_pkg1 evaluates to subpackage sub_pkg1 of the parent package.
-
-
-
-

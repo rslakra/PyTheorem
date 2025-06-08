@@ -2,11 +2,12 @@
 # Author: Rohtash Lakra
 #
 import unittest
-from module.http import HttpClient
+
+from modules.http import HttpClient
 
 
 class HttpTest(unittest.TestCase):
-    """Unit-tests for module.py"""
+    """Unit-tests for http.py"""
 
     def test_get_request(self):
         print("test_get_request")

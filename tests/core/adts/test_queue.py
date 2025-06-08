@@ -4,7 +4,7 @@
 import logging
 
 from core.adts.queue import Queue, PriorityQueue
-from core.enums import MessagePriority
+from core.enums.priority import MessagePriority
 from tests._abstract import AbstractTest
 
 logger = logging.getLogger(__name__)
@@ -28,6 +28,7 @@ class QueueTest(AbstractTest):
         # print items
         for item in queue:
             print(item)
+            
         print()
 
     def test_queue_dequeue(self):

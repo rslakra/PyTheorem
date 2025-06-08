@@ -8,11 +8,12 @@ __author__ = 'Rohtash Lakra (work.lakra@gmail.com)'
 import hashlib
 import json
 import uuid
-from enum import Enum
 from pathlib import Path
 from typing import Callable, TypeVar, List, Dict, Iterator
 
-from core.enums import HttpMethodEnum
+from enum import Enum
+
+from core.enums.http import HttpMethodEnum
 
 # These type variables are used by the container types.
 _T = TypeVar('T')  # Key type

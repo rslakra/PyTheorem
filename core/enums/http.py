@@ -9,36 +9,39 @@ from enum import unique, auto
 from core.enums import AutoNameEnum
 
 print()
-print(f"Sys Version: {sys.version_info}")
+print(f"Sys Version={sys.version_info}")
 print()
 # String Enum
 if sys.version_info >= (3, 11):
     from enum import StrEnum
+
+
     # from strenum import StrEnum
-    class HttpMethodEnum(StrEnum):
+    class HttpMethodEnum(StrEnum, AutoNameEnum):
         """HttpMethod enums defines supported http methods. For readability, add constants in Alphabetical order."""
+        CONNECT = auto()
+        DELETE = auto()
         GET = auto()
         HEAD = auto()
+        OPTIONS = auto()
+        PATCH = auto()
         POST = auto()
         PUT = auto()
-        DELETE = auto()
-        CONNECT = auto()
-        OPTIONS = auto()
         TRACE = auto()
-        PATCH = auto()
 else:
+
     @unique
     class HttpMethodEnum(AutoNameEnum):
         """HttpMethod enums defines supported http methods. For readability, add constants in Alphabetical order."""
         CONNECT = auto()
-        HEAD = auto()
+        DELETE = auto()
         GET = auto()
+        HEAD = auto()
+        OPTIONS = auto()
+        PATCH = auto()
         POST = auto()
         PUT = auto()
-        DELETE = auto()
-        OPTIONS = auto()
         TRACE = auto()
-        PATCH = auto()
 
         """
         _missing_(cls, value)

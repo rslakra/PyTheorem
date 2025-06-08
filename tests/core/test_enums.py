@@ -341,7 +341,7 @@ class EnumsTest(unittest.TestCase):
     def test_http_method_enum(self):
         print("test_http_method_enum")
         self.assertEqual("<enum 'HttpMethodEnum'>", str(HttpMethodEnum))
-        expected = ('CONNECT', 'HEAD', 'GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'TRACE', 'PATCH')
+        expected = ('CONNECT', 'DELETE', 'GET', 'HEAD', 'OPTIONS', 'PATCH', 'POST', 'PUT', 'TRACE')
         self.assertEqual(expected, HttpMethodEnum.names())
         self.assertEqual(expected, HttpMethodEnum.values())
 

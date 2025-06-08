@@ -14,6 +14,12 @@ PYTHON = $(VENV)/bin/python
 PIP = $(VENV)/bin/pip
 REMOVE_FILES := __pycache__
 
+# Default values
+TEST_DIR ?= tests
+PATTERN ?= test*.py
+TOP_DIR ?= .
+VERBOSE ?= -v
+
 # Makefile configs for Sphinx documentation
 # You can set these variables from the command line, and also from the environment for the first two.
 #
@@ -107,6 +113,7 @@ flask-app: venv
 unittest: ## Tests the python application
 unittest:
 	@echo "Running Python [unittest] ..."
+	#@$(PYTHON) -m unittest discover -s tests -p "test*.py" -t . -v
 	@$(PYTHON) -m unittest
 	-#find coverage/ -mindepth 1 -delete
 #	pytest $${TESTS}
@@ -118,6 +125,17 @@ pytest:
 	@echo "Running Python [pytest] ..."
 	@$(PYTHON) -m pytest
 	-#find coverage/ -mindepth 1 -delete
+
+# Example Usage
+# make test                                # default
+# make test PATTERN=test_math_*.py         # run only math-related tests
+# make test TEST_DIR=subtests TOP_DIR=.    # custom test folder
+test: ## Tests the python application
+test:
+	@echo
+	@echo "Running tests from [$(TEST_DIR)], pattern=[$(PATTERN)], rootDir=[$(TOP_DIR)] ..."
+	@echo
+	@$(PYTHON) -m unittest discover -s $(TEST_DIR) -p "$(PATTERN)" -t $(TOP_DIR) $(VERBOSE)
 
 docs: ## Generates the documentation
 docs:

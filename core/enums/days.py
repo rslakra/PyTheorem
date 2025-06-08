@@ -1,3 +1,5 @@
+from datetime import date
+
 from core.enums import BaseEnum
 
 
@@ -16,8 +18,8 @@ class WeekDaysEnum(BaseEnum):
     # add a method to return the weekday from the date
     # @param date
     @classmethod
-    def from_date(cls, date):
-        return cls(date.isoweekday())
+    def from_date(cls, dataObject: date):
+        return cls(dataObject.isoweekday())
 
     # add a method to return the today's weekday.
     @classmethod

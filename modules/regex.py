@@ -19,7 +19,6 @@ if re.search('123', s):
 else:
     print('No match.')
 
-
 # In a regex, a set of characters specified in square brackets ([]) makes up a character class.
 # This metacharacter sequence matches any single character that is in the class
 print(re.search('[0-9][0-9][0-9]', s))
@@ -127,12 +126,11 @@ print(re.search('1.3', s))
 #   ----------------|----------------------------------------------------------------
 
 
-
 # Supported Regular Expression Flags
 # The table below briefly summarizes the available flags. All flags except re.DEBUG have a short, single-letter name
 # and also a longer, full-word name:
 #
-#   ----------------|---------------|----------------------------------------------------------------
+#   ------------|-------------------|----------------------------------------------------------------
 #   Short Name  |   Long Name       |   Effect
 #   re.I        | re.IGNORECASE     | Makes matching of alphabetic characters case-insensitive
 #   re.M        | re.MULTILINE      | Causes start-of-string and end-of-string anchors to match embedded newlines
@@ -144,7 +142,9 @@ print(re.search('1.3', s))
 #   re.L        | re.LOCALE         | Specifies encoding for character classification based on the current locale
 #   ----------------|----------------------------------------------------------------
 print(re.search('A+', 'aaaAAA', re.IGNORECASE))
+
+
 # <_sre.SRE_Match object; span=(0, 6), match='aaaAAA'>
 
-
-
+def parse(pattern: str, input: str):
+    return None
