@@ -1,9 +1,14 @@
 #!/bin/bash
 # Author: Rohtash Lakra
+
+# Define Variables
+haystack="production prod"
+needle="$1"
+
 echo
-if [ "$1" == "production" ]; then
-  python -m unittest discover -s ./tests -p "test_*.py"
+if [[ " $haystack " =~ .*\ $needle\ .* ]]; then
+    python -m unittest discover -s tests -p "test*.py" -t . -v
 else
-  python3 -m unittest
+    python -m unittest
 fi
 echo
