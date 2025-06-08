@@ -5,6 +5,8 @@
 The ```Python``` repository helps in the learning of the python language.
 
 
+[![Python Tests](https://github.com/rslakra/Python/actions/workflows/ci.yml/badge.svg)](https://github.com/rslakra/Python/actions/workflows/ci.yml)
+
 
 ## Folder Structure Conventions
 
@@ -20,16 +22,17 @@ The ```Python``` repository helps in the learning of the python language.
     
 ```
 
+
 ## Python Projects Structures
 
-| Folder | Description |
-|:---|:---|
-|/apidoc|the doc-generated API docs|
-|/code|the project files|
-|/doc|the documentation|
-|/lib|the C-language libraries|
-|/scripts or /bin|the that kind of command-line interface stuff|
-|/tests|the tests of the project|
+| Folder           | Description                                   |
+|:-----------------|:----------------------------------------------|
+| /apidoc          | the doc-generated API docs                    |
+| /code            | the project files                             |
+| /doc             | the documentation                             |
+| /lib             | the C-language libraries                      |
+| /scripts or /bin | the that kind of command-line interface stuff |
+| /tests           | the tests of the project                      |
 
 
 # Building Application
@@ -37,6 +40,7 @@ The ```Python``` repository helps in the learning of the python language.
 ---
 
 ## Create Virtual Env
+
 ```shell
 python3 -m pip install virtualenv
 python3 -m venv venv
@@ -47,11 +51,13 @@ python3 -m venv venv
 ```source``` is Linux/macOS command and doesn't work in Windows.
 
 - Windows
+
 ```shell
 venv\Scripts\activate
 ```
 
 - Mac OS/Linux
+
 ```shell
 source venv/bin/activate
 
@@ -61,18 +67,22 @@ OR
 ```
 
 Output:
+
 ```
 (venv) rslakra@YVXKPJV2CN Python % 
 ```
 
-The parenthesized ```(venv)``` in front of the prompt indicates that you’ve successfully activated the virtual environment.
+The parenthesized ```(venv)``` in front of the prompt indicates that you’ve successfully activated the virtual
+environment.
 
 ## Deactivate Virtual Env
+
 ```shell
 deactivate
 ```
 
 Output:
+
 ```
 rslakra@YVXKPJV2CN % 
 ```
@@ -86,17 +96,18 @@ pip install --upgrade pip
 ## Install Packages
 
 - Install at system level
+
 ```shell
 brew install python-requests
 ```
 
 - Install in specific Virtual Env
+
 ```shell
 pip install requests
 pip install beautifulsoup4
 python3 -m pip install requests
 ```
-
 
 ## Install Requirements
 
@@ -105,12 +116,11 @@ python -m pip install --upgrade pip
 python -m pip install -r requirements.txt
 ```
 
-
 ## Save Requirements (Dependencies)
+
 ```shell
 pip freeze > requirements.txt
 ```
-
 
 ## Configuration Setup
 
@@ -138,8 +148,8 @@ python -m flask --app webapp run --port 8081 --debug
 
 **Note**:- You can stop the development server by pressing ```Ctrl+C``` in your terminal.
 
-
 ## Access Application
+
 ```shell
 http://localhost:8081/ecommerce-iws
 ```
@@ -150,6 +160,7 @@ http://localhost:8081/ecommerce-iws
 ### CPU Bound Systems
 
 - Formula
+
 ```text
 RPS = TotalCore * (1/TaskDurationInSeconds)
 
@@ -158,12 +169,11 @@ i.e.:
 
 ```
 
-| Total Cores  | Task Duration | RPS |
-|:------------:|:--------------|:----|
-|      4       | 100ms         | 40  |
-|      4       | 50ms          | 80  |
-|      4       | 10ms          | 400 |
-
+| Total Cores | Task Duration | RPS |
+|:-----------:|:--------------|:----|
+|      4      | 100ms         | 40  |
+|      4      | 50ms          | 80  |
+|      4      | 10ms          | 400 |
 
 
 # Reference
