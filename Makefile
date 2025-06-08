@@ -130,6 +130,9 @@ pytest:
 # make test                                # default
 # make test PATTERN=test_math_*.py         # run only math-related tests
 # make test TEST_DIR=subtests TOP_DIR=.    # custom test folder
+# To exit immediately on first failure, you can change the runner in the Makefile:
+#@$(PYTHON) -m unittest discover -s $(TEST_DIR) -p "$(PATTERN)" -t $(TOP_DIR) $(VERBOSE) || exit 1
+
 test: ## Tests the python application
 test:
 	@echo
