@@ -12,6 +12,6 @@ pandas==2.2.3
 python-dotenv==1.0.1
 requests==2.32.4
 StrEnum==0.4.15
-urllib3==2.2.2
+urllib3==2.5.0
 setuptools==80.8.0
 
