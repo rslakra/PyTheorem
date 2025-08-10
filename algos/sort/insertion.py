@@ -49,11 +49,3 @@ class InsertionSort(AbstractSort):
 
         logger.debug("-sortDesc(), items=%s", items)
         return items
-
-    # def sort(self, items: Any, order: SortOrder) -> Any:
-    #     if SortOrder.ASC == order:
-    #         return self.sortAsc(items)
-    #     elif SortOrder.DESC == order:
-    #         return self.sortDesc(items)
-    #
-    #     return None

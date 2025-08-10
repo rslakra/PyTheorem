@@ -1,18 +1,16 @@
 #
 # Author: Rohtash Lakra
 #
-from collections.abc import Container
+from abc import ABC
+from collections.abc import Collection
 
-from adts.queue.base import Queue
 
+class List(Collection, ABC):
 
-class List(Container):
-
-    def __add__(self, other):
+    def __add__(self, item):
         pass
 
-    pass
 
-
-class LinkedList(Queue):
-    pass
+list = List()
+list.add()
+print(list)
