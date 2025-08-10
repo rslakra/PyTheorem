@@ -2,11 +2,11 @@
 # You should customize this list as applicable to your project.
 # Learn more about .gitignore:
 #     https://www.atlassian.com/git/tutorials/saving-changes/gitignore
+#
 
 # Node artifact files
 node_modules/
-dist/
-build/
+
 
 
 # Compiled Java class files
@@ -14,9 +14,7 @@ build/
 
 # Compiled Python bytecode
 *.py[cod]
-venv/
-.venv/
-.env
+
 
 
 # Log files
@@ -25,11 +23,11 @@ venv/
 # Package files
 *.jar
 
-# Maven
-target/
-dist/
-
 # JetBrains IDE
+#  JetBrains specific template is maintained in a separate JetBrains.gitignore that can
+#  be found at https://github.com/github/gitignore/blob/main/Global/JetBrains.gitignore
+#  and can be added to the global gitignore or merged into this file.  For a more nuclear
+#  option (not recommended) you can uncomment the following to ignore the entire idea folder.
 .idea/
 *.iws
 *.iml
@@ -67,10 +65,6 @@ Thumbs.db
 *.mov
 *.wmv
 
-# Install
-*.egg-info/
-
-
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
@@ -82,9 +76,10 @@ __pycache__/
 
 # Distribution / packaging
 .Python
+target/
+dist/
 build/
 develop-eggs/
-dist/
 downloads/
 eggs/
 .eggs/
@@ -147,7 +142,6 @@ docs/_build/
 
 # PyBuilder
 .pybuilder/
-target/
 
 # Jupyter Notebook
 .ipynb_checkpoints
@@ -227,13 +221,4 @@ dmypy.json
 
 # Cython debug symbols
 cython_debug/
-
-# PyCharm
-#  JetBrains specific template is maintained in a separate JetBrains.gitignore that can
-#  be found at https://github.com/github/gitignore/blob/main/Global/JetBrains.gitignore
-#  and can be added to the global gitignore or merged into this file.  For a more nuclear
-#  option (not recommended) you can uncomment the following to ignore the entire idea folder.
-.idea/
-
-instance/
 
