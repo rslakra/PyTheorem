@@ -38,25 +38,36 @@ VERBOSE ?= -v
 
 # Defines the default target that `make` will to try to make, or in the case of a phony target, execute the specified
 # commands. This target is executed whenever we just type `make`
-.DEFAULT_GOAL: help
+.DEFAULT_GOAL := help
 
-
+# all operations
 all: help
-
 
 
 # The @ makes sure that the command itself isn't echoed in the terminal
 # Put it first so that "make" without argument is like "make help".
+# Catch-all target: route all unknown targets
 #help:
 #	@$(SPHINXBUILD) -M help "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)
 
 define find.functions
-	@fgrep -h "##" $(MAKEFILE_LIST) | fgrep -v fgrep | sed -e 's/\\$$//' | sed -e 's/##//'
+	@# @fgrep -h "##" $(MAKEFILE_LIST) | fgrep -v fgrep | sed -e 's/\\$$//' | sed -e 's/##//'
+    @printf "%-25s %s\n" "Target" "Description"
+    @printf "%-25s %s\n" "----------------" "----------------"
+    @make -pqR : 2>/dev/null \
+        | awk -v RS= -F: '/^# File/,/^# Finished Make data base/ {if ($$1 !~ "^[#.]") {print $$1}}' \
+        | sort \
+        | egrep -v -e '^[^[:alnum:]]' -e '^$@$$' \
+        | xargs -I _ sh -c 'printf "%-25s " _; make _ -nB | (grep -i "^# Help:" || echo "") | tail -1 | sed "s/^# Help: //g"'
 endef
+
+# A hidden target
+.hidden:
 
 help:
 	@echo
 	@echo 'The following commands can be used:'
+	@echo
 	$(call find.functions)
 	@echo
 
@@ -76,6 +87,7 @@ help:
 
 setup: ## Sets up environment and installs requirements
 setup:
+	@# Help: Sets up environment and installs requirements
 	@echo "Setting up the Python environment ..."
 	python3 -m pip install virtualenv
 	python3 -m $(VENV) $(VENV)
@@ -90,6 +102,7 @@ setup:
 # In this context, the *.project pattern means "anything that has the .project extension"
 clean: ## Remove build and cache files
 clean:
+	@# Help: Remove build and cache files
 	@echo "Cleaning up ..."
 	#$(VENV)/bin/deactivate
 	#deactivate
@@ -101,6 +114,7 @@ clean:
 
 venv: ## Activates the virtual environment
 venv:
+	@# Help: Sets up environment and installs requirements
 	@echo "Activating Virtual Environment ..."
 	source $(VENV)/bin/activate
 
@@ -109,6 +123,7 @@ flask-app: venv
 	@echo "Running Python Application ..."
 	@$(PYTHON) -m flask --app wsgi run --port 8080 --debug
 
+# The ${} notation is specific to the make syntax and is very similar to bash's $()
 # This function uses unittest to test our source files
 unittest: ## Tests the python application
 unittest:
@@ -135,6 +150,8 @@ pytest:
 
 test: ## Tests the python application
 test:
+	@# Help: Tests the python application
+	@echo "Testing Python Application ..."
 	@echo
 	@echo "Running tests from [$(TEST_DIR)], pattern=[$(PATTERN)], rootDir=[$(TOP_DIR)] ..."
 	@echo
@@ -149,14 +166,13 @@ docs:
 
 dist: ## Distributes the application
 dist: test
+	@# Help: Distributes the application
 	python setup.py sdist
-
 
 lint: ## Runs the application, exit if critical rules are broken
 lint:
+	@# Help: Runs the application, exit if critical rules are broken
 	# stop the build if there are Python syntax errors or undefined names
 	flake8 src --count --select=E9,F63,F7,F82 --show-source --statistics
 	# exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
 	flake8 src --count --exit-zero --statistics
-
-
