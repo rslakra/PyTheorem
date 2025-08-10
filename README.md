@@ -13,13 +13,13 @@ The ```Python``` repository helps in the learning of the python language.
 ---
 
 ```
-    /
-    ├── basic                   # The basic python
-    ├── include                 # The include module
-    ├── libs                    # The libs module
-    ├── module                  # The name of the module
-    └── README.md
-    
+/
+├── basic                   # The basic python
+├── include                 # The include module
+├── libs                    # The libs module
+├── module                  # The name of the module
+└── README.md
+
 ```
 
 
@@ -112,8 +112,8 @@ python3 -m pip install requests
 ## Install Requirements
 
 ```shell
-python -m pip install --upgrade pip
-python -m pip install -r requirements.txt
+pip install --upgrade pip
+pip install -r requirements.txt
 ```
 
 ## Save Requirements (Dependencies)
