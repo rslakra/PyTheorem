@@ -1,0 +1,50 @@
+[
+    {
+        "name": "Alice",
+        "age": 30,
+        "isStudent": false,
+        "product": "Laptop",
+        "price": 1200.00,
+        "details": {
+            "brand": "TechCo",
+            "model": "XPS 15",
+            "storageGB": 512
+        }
+    },
+    {
+        "name": "Roh",
+        "age": 28,
+        "isStudent": true,
+        "product": "Keyboard",
+        "price": 800.00,
+        "details": {
+            "brand": "Dell",
+            "model": "XPS 15",
+            "storageGB": 250
+        }
+    },
+    {
+        "name": "Alice",
+        "age": 32,
+        "isStudent": false,
+        "product": "Mouse",
+        "price": 350.0,
+        "details": {
+            "brand": "Sony",
+            "model": "GNP 15",
+            "storageGB": 250
+        }
+    },
+    {
+        "name": "Bob",
+        "age": 32,
+        "isStudent": false,
+        "product": "Mouse",
+        "price": 350.00,
+        "details": {
+            "brand": "Sony",
+            "model": "GNP 15",
+            "storageGB": 250
+        }
+    }
+]

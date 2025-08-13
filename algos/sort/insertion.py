@@ -3,14 +3,17 @@
 #
 from typing import Any
 
-from adts.sort.base import AbstractSort
+from adts.sort.base import AbstractSort, SortType
 from core.logger.base import getLogger
 
 logger = getLogger(__name__)
 
 
 class InsertionSort(AbstractSort):
-
+    
+    def __init__(self):
+        super().__init__("Insertion Sort", SortType.INSERTION)
+    
     def sortAsc(self, items: Any) -> Any:
         logger.debug("+sortAsc(%s)", items)
         for index, item in enumerate(items):
@@ -23,14 +26,14 @@ class InsertionSort(AbstractSort):
                     last_index = i - 1
                 else:
                     break
-
+            
             # logger.debug("last_index=%s", last_index)
             # insert the item at the last index
             items[last_index] = item
-
+        
         logger.debug("-sortAsc(), items=%s", items)
         return items
-
+    
     def sortDesc(self, items: Any) -> Any:
         logger.debug("+sortDesc(%s)", items)
         for index, item in enumerate(items):
@@ -42,10 +45,10 @@ class InsertionSort(AbstractSort):
                     last_index = i - 1
                 else:
                     break
-
+            
             # logger.debug("last_index=%s", last_index)
             # insert the item at the last index
             items[last_index] = item
-
+        
         logger.debug("-sortDesc(), items=%s", items)
         return items

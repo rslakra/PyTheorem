@@ -24,7 +24,7 @@ If you split this functionality into modules instead, then you could reuse compl
 │    ├── graph                      # a graph package/
 │    │    ├── __init__.py           # The package initializer
 │    │    ├── README.md             # Instructions and helpful links
-│    │    └── _                     # The package initializer
+│    │    └── /                     # 
 │    ├── hash                       # a hash package/
 │    ├── heap                       # a heap package/
 │    ├── iterator                   # an iterator package/
@@ -70,12 +70,16 @@ If you split this functionality into modules instead, then you could reuse compl
 │    ├── __init__.py                # The package initializer
 │    └── README.md                  # The README file of ews module
 ├── aptitude                        # an aptitude package/
+├── aws                             # an AWS package/
+├── configs                         # The configs package
+├── core                            # The core package
 ├── domain                          # a domain package/
 ├── games                           # a games package/
 ├── quiz                            # a quiz package/
 ├── README.md                       # Instructions and helpful links
 ├── requirements.txt                # a list of package dependencies
-└── robots.txt                      # tells which URLs the search engine crawlers can access on your site
+├── robots.txt                      # tells which URLs the search engine crawlers can access on your site
+└── /                               # 
 ```
 
 ## Python Projects Structures
@@ -136,7 +140,7 @@ OR
 Output:
 
 ```
-(venv) rslakra@YVXKPJV2CN Python % 
+(venv) <UserName>@<HostName> PyTheorem %
 ```
 
 The parenthesized ```(venv)``` in front of the prompt indicates that you’ve successfully activated the virtual
@@ -151,7 +155,7 @@ deactivate
 Output:
 
 ```
-rslakra@YVXKPJV2CN % 
+<UserName>@<HostName> PyTheorem %
 ```
 
 ## Upgrade ```pip``` release
@@ -162,7 +166,7 @@ pip install --upgrade pip
 
 ## Install Packages/Requirements (Dependencies)
 
-- Install at system level
+- Install at the system level
 
 ```shell
 brew install python-requests
@@ -173,13 +177,12 @@ brew install python-requests
 ```shell
 pip install requests
 pip install beautifulsoup4
-python3 -m pip install requests
+python -m pip install requests
 ```
 
 ## Install Requirements
 
 ```shell
-pip install --upgrade pip
 pip install -r requirements.txt
 ```
 
@@ -191,12 +194,12 @@ pip freeze > requirements.txt
 
 ## Build Python Project
 ```shell
-python3 -m build
+python -m build
 ```
 
 ## Configuration Setup
 
-Set local configuration file.
+Set a local configuration file.
 Create or update local ```.env``` configuration file.
 
 ```shell
@@ -373,6 +376,7 @@ i.e.:
 
 - [Python Projects – Beginner to Advanced](https://www.geeksforgeeks.org/python-projects-beginner-to-advanced/)
 - [The HitchHiker's Guide to Python](https://docs.python-guide.org/writing/structure/)
+
 
 # Author
 
