@@ -137,6 +137,12 @@ class Finder:
         # Set the window geometry
         master.geometry(f"{self.initial_window_width}x{self.initial_window_height}+{x}+{y}")
 
+        # Bring the window to the front and give it focus
+        master.lift()  # Bring the window to the top of the stacking order
+        master.attributes('-topmost', True)  # Make it temporarily "always on top"
+        master.attributes('-topmost', False)  # Disable "always on top" to allow other windows to be focused later
+        master.focus_force()  # Forcefully give focus to the window
+
     def __load_icons(self):
         self.icons_dir = os.path.join(self.root_dir, "gui/icons")
         print("Icons: " + self.icons_dir)
