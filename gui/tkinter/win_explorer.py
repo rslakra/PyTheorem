@@ -228,12 +228,6 @@ class Finder:
                                                  iid=path)
 
         try:
-
-            # for item in sorted(os.listdir(path), key=lambda s: s.lower()):
-            #     full_path = os.path.join(path, item)
-            #     if os.path.isdir(full_path):
-            #         self.treeview.insert(parent_id, "end", text=item, iid=full_path, open=False)
-
             for item in sorted(os.listdir(path), key=lambda s: s.lower()):
                 full_path = os.path.join(path, item)
                 if os.path.isdir(full_path):
@@ -289,8 +283,13 @@ class Finder:
                     item_type = "Folder"
                 else:
                     item_type = "File"
-                    item_size = self.format_size(os.path.getsize(full_path))
-                    item_date_modified = self.format_date(os.path.getmtime(full_path))
+                    try:
+
+                        item_size = self.format_size(os.path.getsize(full_path))
+                        item_date_modified = self.format_date(os.path.getmtime(full_path))
+                    except FileNotFoundError:
+                        item_size = 0
+                        item_date_modified = None
 
                 self.file_list_view.insert("", "end", text=item,
                                            values=(item_type, item_size, item_date_modified))
@@ -366,17 +365,24 @@ class Finder:
         self.treeview.see(current_node)  # Scroll to the selected item if not visible
 
     def on_treeview_select(self, event):
-        selected_item = self.treeview.focus()
+        # print(f"event={event}")
+        selected_items = self.treeview.selection()
+        # print(f"selected_items={selected_items}")
+        # selected_item = self.treeview.focus()
+        selected_item = selected_items[0]
+        # print(f"selected_item={selected_item}")
+        # self.treeview.selection_set(selected_item)
         if selected_item:
-            path = self.treeview.item(selected_item, "iid")
+            # Extract the actual iid (which is the path) from the tuple
+            # path = self.treeview.item(selected_item, "iid")
+            path = selected_item
             self.display_directory(path)
-
             # Expand the selected node if it's a directory
-            if os.path.isdir(path) and not self.treeview.item(selected_item, "open"):
-                self.treeview.item(selected_item, open=True)
-                # Populate its children if not already populated
-                if not self.treeview.get_children(selected_item):
-                    self.populate_treeview(parent_id=selected_item, path=path)
+            if os.path.isdir(path) and not self.treeview.item(path, "open"):
+                self.treeview.item(path, open=True)
+                # Populate children if not already done, for expanding the tree view
+                if not self.treeview.get_children(path):
+                    self.populate_treeview(parent_id=path, path=path)
 
     def on_file_list_double_click(self, event):
         selected_item = self.file_list_view.focus()
