@@ -77,15 +77,20 @@ class Finder:
         self.file_list_frame = tk.Frame(self.main_content_pane, bg="white")
         self.main_content_pane.add(self.file_list_frame)
 
-        # Removed the vertical scrollbar creation and packing
-        # self.file_scroll_y = ttk.Scrollbar(self.file_list_frame, orient="vertical")
-        # self.file_scroll_y.pack(side="right", fill="y")
+        # Create an inner frame to hold the Treeview and its scrollbar
+        self.file_list_scroll_frame = tk.Frame(self.file_list_frame)
+        self.file_list_scroll_frame.pack(side="top", fill="both", expand=True)  # Pack at the top of file_list_frame
 
-        self.file_list_view = ttk.Treeview(self.file_list_frame, columns=("Type", "Size", "Date Modified"),
-                                           # Removed yscrollcommand
-                                           # yscrollcommand=self.file_scroll_y.set,
+        self.file_scroll_y = ttk.Scrollbar(self.file_list_scroll_frame, orient="vertical")
+        # Don't pack it yet, we'll do it conditionally
+
+        self.file_list_view = ttk.Treeview(self.file_list_scroll_frame, columns=("Type", "Size", "Date Modified"),
+                                           yscrollcommand=self.file_scroll_y.set,  # Link to scrollbar
                                            selectmode="browse")
-        self.file_list_view.pack(fill="both", expand=True)  # Allow the Treeview to expand
+        self.file_list_view.pack(side="left", fill="both", expand=True)  # Pack Treeview to the left of its scroll_frame
+
+        # Configure the scrollbar's command to the Treeview's yview
+        self.file_scroll_y.config(command=self.file_list_view.yview)
 
         self.file_list_view.heading("#0", text="Name", anchor="w")
         self.file_list_view.heading("Type", text="Type", anchor="w")
@@ -99,10 +104,10 @@ class Finder:
 
         self.file_list_view.bind("<Double-1>", self.on_file_list_double_click)
 
-        #  Removed scrollbar configuration
-        # self.file_scroll_y.config(command=self.file_list_view.yview)
+        # Bind to the <Configure> event to check scrollbar visibility on resize
+        self.file_list_view.bind("<Configure>", self._manage_file_list_scrollbar)
 
-        # --- Status Bar (now inside file_list_frame) ---
+        # --- Status Bar (now inside file_list_frame, below file_list_scroll_frame) ---
         self.status_bar_frame = tk.Frame(self.file_list_frame, bd=1, relief="sunken",
                                          bg="#f0f0f0")  # Pack into file_list_frame
         self.status_bar_frame.pack(side="bottom", fill="x")  # Placed at the bottom of file_list_frame
@@ -143,6 +148,19 @@ class Finder:
         master.attributes('-topmost', False)  # Disable "always on top" to allow other windows to be focused later
         master.focus_force()  # Forcefully give focus to the window
 
+    def _manage_file_list_scrollbar(self, event=None):
+        # Check if the scrollable area is larger than the visible area
+        # The yview() method returns a tuple like (0.0, 1.0) if all content is visible,
+        # or (fraction_of_top_hidden, fraction_of_bottom_hidden) otherwise.
+        yview_fractions = self.file_list_view.yview()
+
+        if yview_fractions == (0.0, 1.0):
+            # All content fits, hide the scrollbar
+            self.file_scroll_y.pack_forget()
+        else:
+            # Content overflows, show the scrollbar
+            self.file_scroll_y.pack(side="right", fill="y")
+
     def __load_icons(self):
         self.icons_dir = os.path.join(self.root_dir, "gui/icons")
         print("Icons: " + self.icons_dir)
@@ -169,6 +187,9 @@ class Finder:
             print(f"Error: {path} is not a valid directory.")
             self.status_text.set(f"Error: {path} is not a valid directory.")  # Update status bar on error
             return
+
+        # After populating the file_list_view, manage the scrollbar
+        self._manage_file_list_scrollbar()
 
         self.current_path = path
         # Update current path
