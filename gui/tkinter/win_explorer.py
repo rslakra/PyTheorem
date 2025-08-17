@@ -15,18 +15,10 @@ class Finder:
         self.__dispaly_in_center(master)
         self.root_dir = os.getcwd()
         print("Root: " + self.root_dir)
-        self.icons_dir = os.path.join(self.root_dir, "gui/icons")
-        print("Icons: " + self.icons_dir)
-        # Load folder and file icons
-        try:
-            self.folder_icon = tk.PhotoImage(file=os.path.join(self.icons_dir, "folder.png"))
-            self.file_icon = tk.PhotoImage(file=os.path.join(self.icons_dir, "file.png"))
-        except tk.TclError:
-            print("Warning: Could not load folder or file icons. Using default Treeview icons.")
-            self.folder_icon = None
-            self.file_icon = None
-
-        self.current_path = os.path.expanduser("~/Documents")
+        self.current_path = os.path.expanduser(self.root_dir)
+        self.folder_icon = None
+        self.file_icon = None
+        self.__load_icons()
 
         # Styling
         style = ttk.Style()
@@ -75,11 +67,14 @@ class Finder:
         self.file_list_frame = tk.Frame(self.main_content_pane, bg="white")
         self.main_content_pane.add(self.file_list_frame)
 
-        self.file_scroll_y = ttk.Scrollbar(self.file_list_frame, orient="vertical")
-        self.file_scroll_y.pack(side="right", fill="y")
+        # Removed the vertical scrollbar creation and packing
+        # self.file_scroll_y = ttk.Scrollbar(self.file_list_frame, orient="vertical")
+        # self.file_scroll_y.pack(side="right", fill="y")
 
         self.file_list_view = ttk.Treeview(self.file_list_frame, columns=("Type", "Size", "Date Modified"),
-                                           yscrollcommand=self.file_scroll_y.set, selectmode="browse")
+                                           # Removed yscrollcommand
+                                           # yscrollcommand=self.file_scroll_y.set,
+                                           selectmode="browse")
         self.file_list_view.pack(fill="both", expand=True)  # Allow the Treeview to expand
 
         self.file_list_view.heading("#0", text="Name", anchor="w")
@@ -87,14 +82,15 @@ class Finder:
         self.file_list_view.heading("Size", text="Size", anchor="w")
         self.file_list_view.heading("Date Modified", text="Date Modified", anchor="w")
 
-        self.file_list_view.column("#0", width=300, minwidth=150)
-        self.file_list_view.column("Type", width=50, minwidth=50)
-        self.file_list_view.column("Size", width=100, minwidth=100)
-        self.file_list_view.column("Date Modified", width=125, minwidth=125)
+        self.file_list_view.column("#0", width=300, minwidth=150, stretch=False)
+        self.file_list_view.column("Type", width=50, minwidth=50, stretch=False)
+        self.file_list_view.column("Size", width=100, minwidth=100, stretch=False)
+        self.file_list_view.column("Date Modified", width=125, minwidth=125, stretch=False)
 
         self.file_list_view.bind("<Double-1>", self.on_file_list_double_click)
 
-        self.file_scroll_y.config(command=self.file_list_view.yview)
+        #  Removed scrollbar configuration
+        # self.file_scroll_y.config(command=self.file_list_view.yview)
 
         # --- Status Bar (now inside file_list_frame) ---
         self.status_bar_frame = tk.Frame(self.file_list_frame, bd=1, relief="sunken",
@@ -111,23 +107,35 @@ class Finder:
         self.history_index = -1
 
         self.populate_treeview()
-        self.display_directory(self.current_path)
-
+        self.display_directory(self.current_path)  # This should trigger the initial display
+        # Call the update method after initial display
+        self.__update_window_width()
+        
     def __dispaly_in_center(self, master):
-        # Define initial window dimensions
-        window_width = 640
-        window_height = 480
+        # Define initial window dimensions (can be set to 0 to start un-sized)
+        self.initial_window_width = 640
+        self.initial_window_height = 480
 
-        # Get screen dimensions
+        # Get screen dimensions for initial centering
         screen_width = master.winfo_screenwidth()
         screen_height = master.winfo_screenheight()
 
         # Calculate x and y coordinates for centering
-        x = (screen_width // 2) - (window_width // 2)
-        y = (screen_height // 2) - (window_height // 2)
+        x = (screen_width // 2) - (self.initial_window_width // 2)
+        y = (screen_height // 2) - (self.initial_window_height // 2)
 
         # Set the window geometry
-        master.geometry(f"{window_width}x{window_height}+{x}+{y}")
+        master.geometry(f"{self.initial_window_width}x{self.initial_window_height}+{x}+{y}")
+
+    def __load_icons(self):
+        self.icons_dir = os.path.join(self.root_dir, "gui/icons")
+        print("Icons: " + self.icons_dir)
+        # Load folder and file icons
+        try:
+            self.folder_icon = tk.PhotoImage(file=os.path.join(self.icons_dir, "folder.png"))
+            self.file_icon = tk.PhotoImage(file=os.path.join(self.icons_dir, "file.png"))
+        except tk.TclError:
+            print("Warning: Could not load folder or file icons. Using default Treeview icons.")
 
     def populate_treeview(self, parent_id="", path=""):
         if not path:
@@ -181,6 +189,9 @@ class Finder:
 
         # Update status bar with current directory and item count
         self.status_text.set(f"Items: {item_count} | {path}")
+
+        # Call update_window_width after displaying directory to adjust if needed
+        self.__update_window_width()
 
         # Update history
         if not self.history or self.history[-1] != path:
@@ -294,6 +305,34 @@ class Finder:
     def format_date(self, timestamp):
         from datetime import datetime
         return datetime.fromtimestamp(timestamp).strftime("%Y-%m-%d %H:%M:%S")
+
+    def __update_window_width(self):
+        # Calculate the required width based on sidebar and file list
+        # Ensure widgets have been drawn for accurate width calculation
+        self.master.update_idletasks()
+
+        sidebar_width = self.sidebar_frame.winfo_reqwidth()
+
+        # Calculate the total width of file_list_view columns
+        # Account for #0 column and other defined columns
+        file_list_view_width = self.file_list_view.column("#0", "width")
+        for col in self.file_list_view["columns"]:
+            file_list_view_width += self.file_list_view.column(col, "width")
+
+        # Add a small buffer for the PanedWindow sash and general padding
+        paned_sash_width = 5  # Approximate width of the PanedWindow sash
+
+        # You might need to add a bit more for window borders or if the widgets have external padding
+        # 20 is an arbitrary number, adjust it if needed
+        total_width = sidebar_width + file_list_view_width + paned_sash_width + 20
+
+        # Get the current height of the window to maintain it
+        current_height = self.master.winfo_height()
+        if current_height == 1:  # If the window hasn't been drawn yet, use the initial height
+            current_height = self.initial_window_height
+
+        # Set the window geometry
+        self.master.geometry(f"{total_width}x{current_height}")
 
 
 if __name__ == "__main__":
