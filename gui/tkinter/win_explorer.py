@@ -11,19 +11,25 @@ class Finder:
     def __init__(self, master):
         self.master = master
         master.title("Python Explorer")
-        master.geometry("640x480")
+        # master.geometry("640x480")
+        self.__dispaly_in_center(master)
         self.root_dir = os.getcwd()
-        print("Root directory: " + self.root_dir)
+        print("Root: " + self.root_dir)
+        self.icons_dir = os.path.join(self.root_dir, "gui/icons")
+        print("Icons: " + self.icons_dir)
         # Load folder and file icons
-        # Replace 'folder_icon.png' and 'file_icon.png' with your actual icon file paths
-        self.folder_icon = tk.PhotoImage(file=os.path.join(self.root_dir, "gui/icons/folder.png"))
-        self.file_icon = tk.PhotoImage(file=os.path.join(self.root_dir, "gui/icons/file.png"))
+        try:
+            self.folder_icon = tk.PhotoImage(file=os.path.join(self.icons_dir, "folder.png"))
+            self.file_icon = tk.PhotoImage(file=os.path.join(self.icons_dir, "file.png"))
+        except tk.TclError:
+            print("Warning: Could not load folder or file icons. Using default Treeview icons.")
+            self.folder_icon = None
+            self.file_icon = None
 
-        self.current_path = os.path.expanduser("~/Documents")  # Starting directory
+        self.current_path = os.path.expanduser("~/Documents")
 
         # Styling
         style = ttk.Style()
-        # style.theme_use('vista')  # A Windows-like theme for ttk
         style.configure("Treeview", rowheight=25, font=("Segoe UI", 10))
         style.configure("Treeview.Heading", font=("Segoe UI", 10, "bold"))
         style.configure("TButton", font=("Segoe UI", 9))
@@ -40,12 +46,13 @@ class Finder:
 
         self.path_entry = ttk.Entry(self.top_bar_frame, font=("Segoe UI", 10))
         self.path_entry.pack(side="left", fill="x", expand=True, padx=5, pady=5)
-        self.path_entry.bind("<Return>", self.navigate_to_path)  # Navigate on Enter key
+        self.path_entry.bind("<Return>", self.navigate_to_path)
         self.path_entry.insert(0, self.current_path)
 
         # --- Main Content Area (Sidebar and File List) ---
         self.main_content_pane = ttk.PanedWindow(master, orient="horizontal")
-        self.main_content_pane.pack(side="right", fill="both", expand=True)
+        self.main_content_pane.pack(side="right", fill="both",
+                                    expand=True)  # This needs to be packed before the status bar, if you want the status bar outside the pane
 
         # Sidebar (Treeview for directory structure)
         self.sidebar_frame = tk.Frame(self.main_content_pane, width=250, bg="white", bd=1, relief="raised")
@@ -73,7 +80,7 @@ class Finder:
 
         self.file_list_view = ttk.Treeview(self.file_list_frame, columns=("Type", "Size", "Date Modified"),
                                            yscrollcommand=self.file_scroll_y.set, selectmode="browse")
-        self.file_list_view.pack(fill="both", expand=True)
+        self.file_list_view.pack(fill="both", expand=True)  # Allow the Treeview to expand
 
         self.file_list_view.heading("#0", text="Name", anchor="w")
         self.file_list_view.heading("Type", text="Type", anchor="w")
@@ -89,12 +96,38 @@ class Finder:
 
         self.file_scroll_y.config(command=self.file_list_view.yview)
 
+        # --- Status Bar (now inside file_list_frame) ---
+        self.status_bar_frame = tk.Frame(self.file_list_frame, bd=1, relief="sunken",
+                                         bg="#f0f0f0")  # Pack into file_list_frame
+        self.status_bar_frame.pack(side="bottom", fill="x")  # Placed at the bottom of file_list_frame
+
+        self.status_text = tk.StringVar()
+        self.status_text.set("Ready")
+        self.status_bar = ttk.Label(self.status_bar_frame, textvariable=self.status_text,
+                                    anchor="w")
+        self.status_bar.pack(side="left", fill="x", expand=True, padx=5, pady=2)  # Ensure label expands within frame
+
         self.history = []
         self.history_index = -1
 
         self.populate_treeview()
         self.display_directory(self.current_path)
-        # self.select_and_expand_treeview_path(self.current_path)
+
+    def __dispaly_in_center(self, master):
+        # Define initial window dimensions
+        window_width = 640
+        window_height = 480
+
+        # Get screen dimensions
+        screen_width = master.winfo_screenwidth()
+        screen_height = master.winfo_screenheight()
+
+        # Calculate x and y coordinates for centering
+        x = (screen_width // 2) - (window_width // 2)
+        y = (screen_height // 2) - (window_height // 2)
+
+        # Set the window geometry
+        master.geometry(f"{window_width}x{window_height}+{x}+{y}")
 
     def populate_treeview(self, parent_id="", path=""):
         if not path:
@@ -107,14 +140,10 @@ class Finder:
             if os.path.isdir(full_path):
                 self.treeview.insert(parent_id, "end", text=item, iid=full_path, open=False)
 
-            # if os.path.isdir(full_path):
-            #     self.treeview.insert(parent_id, "end", text=item, iid=full_path, open=False, image=self.folder_icon)
-            # else:
-            #     self.treeview.insert(parent_id, "end", text=item, iid=full_path, open=False, image=self.file_icon)
-
     def display_directory(self, path):
         if not os.path.isdir(path):
             print(f"Error: {path} is not a valid directory.")
+            self.status_text.set(f"Error: {path} is not a valid directory.")  # Update status bar on error
             return
 
         self.current_path = path
@@ -123,6 +152,7 @@ class Finder:
 
         self.file_list_view.delete(*self.file_list_view.get_children())  # Clear file list
 
+        item_count = 0  # Initialize count for status bar
         try:
             for item in sorted(os.listdir(path), key=lambda s: s.lower()):
                 full_path = os.path.join(path, item)
@@ -132,16 +162,14 @@ class Finder:
 
                 if os.path.isdir(full_path):
                     item_type = "Folder"
-                    # self.file_list_view.insert("", "end", text=item, values=(item_type, item_size, item_date_modified),
-                    #                            image=self.folder_icon)
                 else:
                     item_type = "File"
                     item_size = self.format_size(os.path.getsize(full_path))
                     item_date_modified = self.format_date(os.path.getmtime(full_path))
-                    # self.file_list_view.insert("", "end", text=item, values=(item_type, item_size, item_date_modified),
-                    #                            image=self.file_icon)
 
-                self.file_list_view.insert("", "end", text=item, values=(item_type, item_size, item_date_modified))
+                self.file_list_view.insert("", "end", text=item,
+                                           values=(item_type, item_size, item_date_modified))
+                item_count += 1
 
                 # Update sidebar selection and expansion
                 # First, ensure the path exists in the treeview
@@ -149,6 +177,10 @@ class Finder:
 
         except PermissionError:
             print(f"Permission denied to access: {path}")
+            self.status_text.set(f"Permission denied to access: {path}")  # Update status bar on error
+
+        # Update status bar with current directory and item count
+        self.status_text.set(f"Items: {item_count} | {path}")
 
         # Update history
         if not self.history or self.history[-1] != path:
