@@ -5,21 +5,67 @@ import os
 import tkinter as tk
 from tkinter import ttk
 
+from PIL import Image, ImageTk
+
+
+class IconHandler(tk.Frame):
+
+    def __init__(self, master, root_dir, display_icons: bool = False):
+        tk.Frame.__init__(self, master)
+        self.__root_dir = root_dir
+        self.__display_icons = display_icons
+        self.icon_size = (16, 16)  # Define your desired icon size
+
+    @property
+    def display_icons(self):
+        return self.__display_icons
+
+    def load_icons(self):
+        """Loads folder and file icons."""
+        self.icons_dir = os.path.join(self.__root_dir, "gui/icons")
+        print("Icons: " + self.icons_dir)
+        # Load folder and file icons
+        try:
+            if self.display_icons:
+                # Use Pillow to open the image and then convert to PhotoImage
+                folder_image_pil = Image.open(os.path.join(self.icons_dir, "folder.png"))
+                # Use a high-quality resampling filter
+                folder_image_pil = folder_image_pil.resize(self.icon_size, Image.Resampling.LANCZOS)
+                self.folder_icon = ImageTk.PhotoImage(folder_image_pil)
+
+                file_image_pil = Image.open(os.path.join(self.icons_dir, "file.png"))
+                file_image_pil = file_image_pil.resize(self.icon_size, Image.Resampling.LANCZOS)
+                self.file_icon = ImageTk.PhotoImage(file_image_pil)
+            else:
+                self.folder_icon = tk.PhotoImage(file=os.path.join(self.icons_dir, "folder.png"))
+                self.file_icon = tk.PhotoImage(file=os.path.join(self.icons_dir, "file.png"))
+        except tk.TclError:
+            print("Warning: Could not load folder or file icons. Using default Treeview icons.")
+            self.folder_icon = None  # Set to None if loading fails
+            self.file_icon = None  # Set to None if loading fails
+        except FileNotFoundError:  # Catch specific error for missing files
+            print("Warning: Icon files not found.")
+            self.folder_icon = None
+            self.file_icon = None
+        except Exception as e:  # Catch other potential errors during loading
+            print(f"Warning: Could not load folder or file icons: {e}")
+            self.folder_icon = None
+            self.file_icon = None
+
 
 class Finder:
 
     def __init__(self, master):
         self.master = master
         master.title("Python Explorer")
-        # master.geometry("640x480")
-        self.__dispaly_in_center(master)
         self.root_dir = os.getcwd()
         print("Root: " + self.root_dir)
-        self.current_path = os.path.expanduser(self.root_dir)
-        self.folder_icon = None
-        self.file_icon = None
-        self.__load_icons()
         self.read_only_path_entry = False
+        self.display_only_folders_tree = False
+        self.icon_handler = IconHandler(master, self.root_dir, display_icons=True)
+        self.__dispaly_in_center(master)
+        self.current_path = os.path.expanduser(self.root_dir)
+        self.icon_handler.load_icons()
 
         # Styling
         style = ttk.Style()
@@ -127,6 +173,7 @@ class Finder:
         self.__update_window_width()
 
     def __dispaly_in_center(self, master):
+        # master.geometry("640x480")
         # Define initial window dimensions (can be set to 0 to start un-sized)
         self.initial_window_width = 640
         self.initial_window_height = 480
@@ -161,26 +208,59 @@ class Finder:
             # Content overflows, show the scrollbar
             self.file_scroll_y.pack(side="right", fill="y")
 
-    def __load_icons(self):
-        self.icons_dir = os.path.join(self.root_dir, "gui/icons")
-        print("Icons: " + self.icons_dir)
-        # Load folder and file icons
-        try:
-            self.folder_icon = tk.PhotoImage(file=os.path.join(self.icons_dir, "folder.png"))
-            self.file_icon = tk.PhotoImage(file=os.path.join(self.icons_dir, "file.png"))
-        except tk.TclError:
-            print("Warning: Could not load folder or file icons. Using default Treeview icons.")
-
     def populate_treeview(self, parent_id="", path=""):
         if not path:
-            path = os.path.expanduser("~")  # Start from home directory
-        if not parent_id:
-            parent_id = self.treeview.insert("", "end", text=os.path.basename(path) or path, open=True, iid=path)
+            # Start from home directory
+            path = os.path.expanduser("~")
 
-        for item in sorted(os.listdir(path), key=lambda s: s.lower()):
-            full_path = os.path.join(path, item)
-            if os.path.isdir(full_path):
-                self.treeview.insert(parent_id, "end", text=item, iid=full_path, open=False)
+        if not parent_id:
+            # For the root node, use the folder icon
+            if self.icon_handler.display_icons:
+                parent_id = self.treeview.insert("", "end",
+                                                 text=os.path.basename(path) or path,
+                                                 open=True,
+                                                 iid=path,
+                                                 image=self.icon_handler.folder_icon)
+            else:
+                parent_id = self.treeview.insert("", "end",
+                                                 text=os.path.basename(path) or path,
+                                                 open=True,
+                                                 iid=path)
+
+        try:
+
+            # for item in sorted(os.listdir(path), key=lambda s: s.lower()):
+            #     full_path = os.path.join(path, item)
+            #     if os.path.isdir(full_path):
+            #         self.treeview.insert(parent_id, "end", text=item, iid=full_path, open=False)
+
+            for item in sorted(os.listdir(path), key=lambda s: s.lower()):
+                full_path = os.path.join(path, item)
+                if os.path.isdir(full_path):
+                    if self.icon_handler.display_icons:
+                        # For directories, use the folder icon
+                        self.treeview.insert(parent_id, "end",
+                                             text=item,
+                                             iid=full_path,
+                                             open=False,
+                                             image=self.icon_handler.folder_icon)
+                    else:
+                        self.treeview.insert(parent_id, "end", text=item, iid=full_path, open=False)
+                else:
+                    if not self.display_only_folders_tree:
+                        if self.icon_handler.display_icons:
+                            # Files are also inserted as treeview nodes
+                            # For files, use the file icon
+                            self.treeview.insert(parent_id, "end",
+                                                 text=item,
+                                                 iid=full_path,
+                                                 open=False,
+                                                 image=self.icon_handler.file_icon)
+                        else:
+                            self.treeview.insert(parent_id, "end", text=item, iid=full_path, open=False)
+
+        except PermissionError:
+            print(f"Permission denied to access: {path}")
 
     def display_directory(self, path):
         if not os.path.isdir(path):
