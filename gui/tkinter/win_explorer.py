@@ -19,6 +19,7 @@ class Finder:
         self.folder_icon = None
         self.file_icon = None
         self.__load_icons()
+        self.read_only_path_entry = False
 
         # Styling
         style = ttk.Style()
@@ -36,10 +37,19 @@ class Finder:
         self.forward_button = ttk.Button(self.top_bar_frame, text="→", command=self.go_forward)
         self.forward_button.pack(side="left", padx=5, pady=5)
 
-        self.path_entry = ttk.Entry(self.top_bar_frame, font=("Segoe UI", 10))
+        # Set state to readonly
+        if self.read_only_path_entry:
+            self.path_entry = ttk.Entry(self.top_bar_frame, font=("Segoe UI", 10), state="readonly")
+        else:
+            self.path_entry = ttk.Entry(self.top_bar_frame, font=("Segoe UI", 10))
+
         self.path_entry.pack(side="left", fill="x", expand=True, padx=5, pady=5)
-        self.path_entry.bind("<Return>", self.navigate_to_path)
-        self.path_entry.insert(0, self.current_path)
+        # Remove or modify this if navigation on Enter is no longer desired
+        if not self.read_only_path_entry:
+            self.path_entry.bind("<Return>", self.navigate_to_path)
+
+        # update path entry with current path
+        self.__update_path_entry()
 
         # --- Main Content Area (Sidebar and File List) ---
         self.main_content_pane = ttk.PanedWindow(master, orient="horizontal")
@@ -110,7 +120,7 @@ class Finder:
         self.display_directory(self.current_path)  # This should trigger the initial display
         # Call the update method after initial display
         self.__update_window_width()
-        
+
     def __dispaly_in_center(self, master):
         # Define initial window dimensions (can be set to 0 to start un-sized)
         self.initial_window_width = 640
@@ -155,8 +165,8 @@ class Finder:
             return
 
         self.current_path = path
-        self.path_entry.delete(0, tk.END)
-        self.path_entry.insert(0, path)
+        # Update current path
+        self.__update_path_entry()
 
         self.file_list_view.delete(*self.file_list_view.get_children())  # Clear file list
 
@@ -333,6 +343,17 @@ class Finder:
 
         # Set the window geometry
         self.master.geometry(f"{total_width}x{current_height}")
+
+    def __update_path_entry(self):
+        # To update a disabled Entry:
+        if self.read_only_path_entry:
+            self.path_entry.config(state="normal")  # Enable it
+
+        self.path_entry.delete(0, tk.END)
+        self.path_entry.insert(0, self.current_path)
+
+        if self.read_only_path_entry:
+            self.path_entry.config(state="readonly")  # Set back to readonly
 
 
 if __name__ == "__main__":
