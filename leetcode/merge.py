@@ -11,7 +11,7 @@ logger = getLogger(__name__)
 
 class LC721AccountsMerge:
     """
-    URL: https://leetcode.com/problems/merge-lc721-accounts
+    URL: https://leetcode.com/problems/accounts-merge/description/
 
     721. Accounts Merge
     Given a list of accounts where each element accounts[i] is a list of strings, where the first element
