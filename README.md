@@ -6,7 +6,8 @@ The ```PyTheorem``` repository helps in the learning of the python language and 
 types and implementation of them including the
 interview preparation algorithms in ```Python``` language.
 
-[![Python Tests](https://github.com/rslakra/Python/actions/workflows/ci.yml/badge.svg)](https://github.com/rslakra/Python/actions/workflows/ci.yml)
+[![Python Tests](https://github.com/rslakra/PyTheorem/actions/workflows/ci.yml/badge.svg?branch=master)](https://github.com/rslakra/PyTheorem/actions/workflows/ci.yml)
+
 
 ## Folder Structure Conventions
 
