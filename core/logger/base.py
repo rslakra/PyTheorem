@@ -8,6 +8,9 @@ import logging
 import os
 
 UTF_8 = 'utf-8'
+LOG_FILE_NAME = "PyTheorem"
+
+logFileName = os.getenv("LOG_FILE_NAME", LOG_FILE_NAME)
 
 
 class Logger(object):
@@ -36,7 +39,6 @@ def getLogger(__name__):
 # init logger
 configLogger()
 
-logFileName = os.getenv("LOG_FILE_NAME")
 
 # configure logger
 # [%(asctime)s] : [%(levelname)s] : %(name)s : %(message)s

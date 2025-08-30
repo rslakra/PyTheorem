@@ -6,6 +6,8 @@ import logging
 import os
 from datetime import datetime
 
+from core.logger.base import logFileName
+
 """
 Some of the commonly used parameters for basicConfig() are the following:
 
@@ -20,8 +22,6 @@ References:
 - https://docs.python.org/3/library/datetime.html#strftime-and-strptime-behavior
 
 """
-
-logFileName = os.getenv("LOG_FILE_NAME")
 
 # Pattern: %d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n
 # logFormat = f"%(asctime)s [%(thread)d:%(threadName)s] [%(process)d-%(processName)s] [%(levelname)8s] - (%(name)s:%(filename)s:%(lineno)d) - %(message)s"
