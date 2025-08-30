@@ -114,7 +114,7 @@ class S3Client:
 
 if __name__ == '__main__':
     s3Client = S3Client()
-    bucket_name = "tod-s3-dev-ue1-push-notification-rxlo"
+    bucket_name = "PyTheorem-s3-dev-ue1-push-notification-rxlo"
     file_name = "prod_11_28.csv"
     s3_file_bytes = s3Client.download(bucket_name, file_name)
     print(f"s3_file_bytes={s3_file_bytes}")

@@ -19,8 +19,8 @@ try:
         'database': os.getenv('RDS_DB_NAME', None)
     }
 
-    # db_creds['host'] = 'tod-rds-dev-ue1-backend.proxy-cs1tgvphffrx.us-east-1.rds.amazonaws.com'
-    # db_creds['database'] = 'tod'
+    # db_creds['host'] = 'PyTheorem-rds-dev-ue1-backend.proxy-cs1tgvphffrx.us-east-1.rds.amazonaws.com'
+    # db_creds['database'] = 'PyTheorem'
 
     print()
     print(f"db_creds={json.dumps(db_creds)}")

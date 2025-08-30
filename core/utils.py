@@ -23,48 +23,52 @@ _V = TypeVar('V')  # Value type
 
 
 class Utils(Enum):
-    """
-    Prints Arguments
 
-    @:param args - tuple of positional arguments
-
-    *args - collects additional positional arguments into a tuple, not a list. The arguments are accessible using tuple indexing and iteration.
-    """
+    @classmethod
+    def print_line(cls, char: str = '-', length: int = 80):
+        """Prints a line of the given character."""
+        print(char * length)
 
     @staticmethod
     def print_args(*args):
+        """
+        Prints Arguments
+
+        @:param args - tuple of positional arguments
+
+        *args - collects additional positional arguments into a tuple, not a list. The arguments are accessible using tuple indexing and iteration.
+        """
         for arg in args:
             print(arg)
+
         # for count, arg in enumerate(args):
         # print('{0}. {1}'.format(count, arg))
 
-    """
-    Prints Keyword Arguments
-    
-    @:param kwargs - dictionary of keyword arguments (keyword arguments (**kwargs) to a function)
-    """
-
     @staticmethod
     def print_kwargs(**kwargs):
+        """
+        Prints Keyword Arguments
+
+        @:param kwargs - dictionary of keyword arguments (keyword arguments (**kwargs) to a function)
+        """
         # print(f"kwargs={kwargs}")
         for key, value in kwargs.items():
             print("%s = %s" % (key, value))
             # print('{0} = {1}'.format(key, value))
 
-    """
-    Generates Unique UUID
-    """
-
     @classmethod
     def generate_uuid(cls):
+        """
+        Generates Unique UUID
+        """
         return uuid.uuid4().hex
-
-    """
-    Parses User-Agent
-    """
 
     @classmethod
     def parse_user_agent(cls, user_agent_str):
+        """
+        Parses User-Agent
+        """
+
         translator = str.maketrans('', '', '{}\"')
         user_agent = user_agent_str.translate(translator)
         # print(f"user-agent:{user_agent}")
@@ -75,12 +79,10 @@ class Utils(Enum):
             for key, value in (token.split(':') for token in user_agent.split(',') if len(token.split(':')) == 2)
         }
 
-    """
-    Executes an HTTP Request
-    """
-
     @staticmethod
     def execute(url, method=None):
+        """Executes an HTTP Request"""
+
         import urllib.request
         import ssl
         ssl.get_default_verify_paths()

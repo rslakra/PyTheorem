@@ -3,9 +3,9 @@
 #
 # reqeustIdFilter = RequestIdFilter()
 # https://dev.to/camillehe1992/mask-sensitive-data-using-python-built-in-logging-module-45fa
-
 import inspect
 import logging
+import os
 
 UTF_8 = 'utf-8'
 
@@ -36,6 +36,8 @@ def getLogger(__name__):
 # init logger
 configLogger()
 
+logFileName = os.getenv("LOG_FILE_NAME")
+
 # configure logger
 # [%(asctime)s] : [%(levelname)s] : %(name)s : %(message)s
 # 2024-04-23 17:22:14,691 [DEBUG] - [__main__] : Staring application ...
@@ -48,7 +50,7 @@ logging.basicConfig(
     level=logging.DEBUG,
     format="%(asctime)s [%(levelname)8s] - [%(threadName)s-%(thread)d:%(filename)s (%(lineno)d)] : %(message)s",
     handlers=[
-        logging.FileHandler("app.log"),
+        logging.FileHandler(logFileName),
         logging.StreamHandler()
     ]
 )

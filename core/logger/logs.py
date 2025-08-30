@@ -3,6 +3,7 @@
 # Reference: https://realpython.com/python-logging/
 #
 import logging
+import os
 from datetime import datetime
 
 """
@@ -20,10 +21,12 @@ References:
 
 """
 
+logFileName = os.getenv("LOG_FILE_NAME")
+
 # Pattern: %d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n
 # logFormat = f"%(asctime)s [%(thread)d:%(threadName)s] [%(process)d-%(processName)s] [%(levelname)8s] - (%(name)s:%(filename)s:%(lineno)d) - %(message)s"
 logFormat = f"%(asctime)s %(threadName)s [%(levelname)8s] (%(processName)s:%(name)s:%(filename)s:%(lineno)d) - %(message)s"
-logging.basicConfig(level=logging.DEBUG, filename="app.log", filemode="a", format=logFormat,
+logging.basicConfig(level=logging.DEBUG, filename=logFileName, filemode="a", format=logFormat,
                     datefmt="%m-%d-%Y %H:%M:%S.%z")
 
 UTF_8 = 'utf-8'
@@ -48,7 +51,7 @@ class AppLogger:
     _log_format = f"%(asctime)s %(threadName)s [%(levelname)8s] (%(processName)s:%(name)s:%(filename)s:%(lineno)d) - %(message)s"
 
     def __init__(self):
-        logging.basicConfig(level=logging.DEBUG, filename="app.log", filemode="a", format=self._log_format,
+        logging.basicConfig(level=logging.DEBUG, filename=logFileName, filemode="a", format=self._log_format,
                             datefmt="%m-%d-%Y %H:%M:%S.%z")
 
         # logger.info("AppLogger()")
@@ -57,7 +60,7 @@ class AppLogger:
     def add_handler(cls, logger: logging.Logger):
         # Create log handlers
         cls.console_handler = logging.StreamHandler()
-        cls.file_handler = logging.StreamHandler("app.log")
+        cls.file_handler = logging.StreamHandler(logFileName)
 
         # add log level
         cls.console_handler.setLevel(logging.DEBUG)
