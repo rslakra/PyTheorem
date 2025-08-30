@@ -127,7 +127,7 @@ class PdfHandler:
 
             # Check PandaDoc response's status_code and response type and JSON.
             print(f"PandaDoc response status={response.status_code}")
-            # Step 2-A: On Success Response, update Tinker's DB with the current document status and version
+            # Step 2-A: On Success Response, update DB with the current document status and version
             # if self.is_success(response):
             #     contents = response.content.decode('utf-8')
 
