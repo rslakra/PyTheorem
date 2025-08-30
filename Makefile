@@ -158,7 +158,6 @@ clean:
 	find . -name '*.py[co]' -delete
 	find . -type f -name '*.py[co]' -delete
 
-
 setup: ## Sets up environment and installs requirements
 setup:
 	@# Help: Sets up environment and installs requirements
@@ -170,8 +169,8 @@ setup:
 	$(ACTIVATE)
 	(pwd)
 	@echo
-	$(PIP) install --upgrade pip
-	$(PIP) install -r ./requirements.txt
+#	$(PIP) install --upgrade pip
+#	$(PIP) install -r ./requirements.txt
 
 
 install-requirements:
@@ -179,10 +178,7 @@ install-requirements:
 	@echo "Installing the requirements ..."
 	$(ACTIVATE)
 	$(PIP) install --upgrade pip
-	$(PIP) install -r ./layers/layer-aws/requirements.txt
-	$(PIP) install -r ./layers/layer-core/requirements.txt
-	$(PIP) install -r ./layers/layer-mysql/requirements.txt
-	$(PIP) install -r ./layers/layer-tai/requirements.txt
+	$(PIP) install -r ./requirements.txt
 
 
 venv: ## Activates the virtual environment
