@@ -25,7 +25,7 @@ python-dotenv==1.0.1
 pydantic==2.8.2
 pydantic_core==2.20.1
 PyJWT==2.6.0
-pypdf==5.7.0
+pypdf==6.0.0
 PyYAML==6.0.2
 gunicorn==23.0.0
 requests==2.32.4
