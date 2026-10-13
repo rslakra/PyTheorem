@@ -36,4 +36,4 @@ StrEnum==0.4.15
 typing_extensions==4.12.2
 urllib3==2.8.0
 setuptools==83.0.0
-Werkzeug==3.1.7
+Werkzeug==3.1.9
